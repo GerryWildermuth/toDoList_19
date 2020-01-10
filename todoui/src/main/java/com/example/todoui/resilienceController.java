@@ -39,11 +39,11 @@ public class resilienceController {
 
     }
 
-    @CircuitBreaker(name="BACKEND",fallbackMethod = "firstFallback")
     @RateLimiter(name="BACKEND")
+    @Bulkhead(name="BACKEND",type = Bulkhead.Type.THREADPOOL)
+    @CircuitBreaker(name="BACKEND",fallbackMethod = "firstFallback")
     @Retry(name="BACKEND",fallbackMethod = "secondFallback")
     @GetMapping(path = "resilience")
-    @Bulkhead(name="BACKEND",type = Bulkhead.Type.THREADPOOL)
     public CompletableFuture<ModelAndView> getItems()
     {
         String MethodName = "Standard";
